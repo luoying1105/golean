@@ -22,14 +22,14 @@ func mqConnect() (*amqp.Connection, *amqp.Channel, error) {
 }
 
 func PushData(msgContent *string) {
-	//Publish/Subscribe
+
 	conn, channel, err := mqConnect()
 	tools.FailOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 	defer channel.Close()
 
 	err = channel.ExchangeDeclare(
-		exchange, // name
+		"logs",   // name
 		"fanout", // type
 		true,     // durable
 		false,    // auto-deleted
@@ -60,7 +60,7 @@ func Receive() {
 	defer channel.Close()
 
 	err = channel.ExchangeDeclare(
-		exchange, // name
+		"logs",   // name
 		"fanout", // type
 		true,     // durable
 		false,    // auto-deleted
